@@ -1,4 +1,9 @@
-import { useState } from 'react'
+//import { useState } from 'react'
+import counterReducer from './reducers/counterReducer'
+import { createStore } from 'redux'
+
+//This object carries the state
+const store = createStore(counterReducer)
 
 //Button component
 const Button = ({eventHandler,text}) =>
@@ -59,30 +64,17 @@ const Statistics = ({good,neutral,bad}) => {
 }
 
 const App = () => {
-  // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-
-  const giveGoodFeedback = () => {
-    setGood(good+1)
-  }
-
-  const giveNeutralFeedback = () => {
-    setNeutral(neutral+1)
-  }
-
-  const giveBadFeedback = () => {
-    setBad(bad+1)
-  }
 
   return (
     <div>
       <h1>Give feedback</h1>
-      <Button eventHandler={giveGoodFeedback} text={'good'} />
-      <Button eventHandler={giveNeutralFeedback} text={'neutral'} />
-      <Button eventHandler={giveBadFeedback} text={'bad'} />
-      <Statistics good={good} neutral={neutral} bad={bad}/>
+      <Button eventHandler={store.dispatch({type: 'GOOD'})} text={'good'} />
+      <Button eventHandler={store.dispatch({type: 'OK'})} text={'neutral'} />
+      <Button eventHandler={store.dispatch({type: 'BAD'})} text={'bad'} />
+      <Button eventHandler={store.dispatch({type: 'ZERO'})} text={'reset stats'} />
+      <Statistics good={store.getState().good}
+        neutral={store.getState().ok}
+        bad={store.getState().bad}/>
     </div>
   )
 }
